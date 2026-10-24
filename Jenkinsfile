@@ -12,7 +12,9 @@ pipeline{
         }
         stage("Trivy File scan"){
             steps{
-                sh "trivy fs . -o results.json"
+                script{
+                    trivy()
+                }
             }
         }
         stage("Build"){
@@ -27,20 +29,16 @@ pipeline{
         }
         stage("Push to Docker Hub"){
             steps{
-                withCredentials([usernamePassword(
-                    credentialsId: "dockerhubcreds",
-                    passwordVariable: "dockerPass",
-                    usernameVariable: "dockerUser"
-                    )]){
-                    sh "docker login -u ${env.dockerUser} -p ${env.dockerPass}"
-                    sh "docker image tag my-flask-app ${env.dockerUser}/my-flask-app"
-                    sh "docker push ${env.dockerUser}/my-flask-app:latest"
+                script{
+                    docker-push("dockerhubcreds", "my-flask-app")
                 }
             }
         }
         stage("Deploy"){
             steps{
-                sh "docker compose up -d --build flask-app"
+                script{
+                    docker-compose()
+                }
             }
         }
     }
