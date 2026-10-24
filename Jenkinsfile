@@ -30,14 +30,14 @@ pipeline{
         stage("Push to Docker Hub"){
             steps{
                 script{
-                    docker-push("dockerhubcreds", "my-flask-app")
+                    docker_push("dockerhubcreds","my-flask-app")
                 }
             }
         }
         stage("Deploy"){
             steps{
                 script{
-                    docker-compose()
+                    docker_compose()
                 }
             }
         }
