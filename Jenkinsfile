@@ -45,7 +45,7 @@ post{
             to: "sohammahi1@gmail.com"
         )
     }
-    failed{
+    failure{
         emailtext(
             subject: "Build Failed!!!",
             body: "Bad News!! Build is FAILED!!!!",
